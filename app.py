@@ -6,13 +6,12 @@ from io import BytesIO
 # --- Konfigurasi Halaman dan Tema ---
 st.set_page_config(
     page_title="MediScan AI",
-    page_icon="�",
+    page_icon="🩹",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS Kustom untuk Tampilan Profesional ---
-# Menggunakan Markdown dengan HTML untuk menyuntikkan CSS.
+# --- CSS Kustom untuk Tampilan Dark Mode Profesional ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
@@ -21,78 +20,81 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    /* Palet Warna & Latar Belakang */
+    /* Palet Warna & Latar Belakang (Dark Mode) */
     :root {
-        --primary-blue: #007bff;
-        --secondary-green: #28a745;
-        --light-bg: #f8f9fa;
-        --card-bg: #ffffff;
-        --text-dark: #212529;
-        --text-subtle: #6c757d;
-        --border-color: #dee2e6;
-        --shadow-soft: rgba(0, 0, 0, 0.05);
+        --dark-bg: #1a1a2e;
+        --card-bg: #222540;
+        --accent-blue: #00bcd4;
+        --accent-purple: #8e2de2;
+        --text-light: #e0e0e0;
+        --text-muted: #a0a0a0;
+        --border-color: #3e3e5c;
+        --shadow-soft: rgba(0, 0, 0, 0.3);
     }
     
     body {
-        background-color: var(--light-bg);
-        color: var(--text-dark);
+        background-color: var(--dark-bg);
+        color: var(--text-light);
     }
     
     .stApp {
-        background-color: var(--light-bg);
+        background-color: var(--dark-bg);
     }
 
-    /* Kartu UI yang Lebih Bersih */
+    /* Kartu UI yang Lebih Bersih & Menonjol */
     .clean-card {
         background-color: var(--card-bg);
-        border-radius: 1rem;
-        box-shadow: 0 4px 12px var(--shadow-soft);
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 20px var(--shadow-soft);
         border: 1px solid var(--border-color);
-        padding: 2.5rem;
+        padding: 3rem;
         margin-top: 2rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .clean-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
     }
     
-    /* Judul Utama */
+    /* Judul Utama dengan Gradien */
     .main-header {
-        font-size: 3rem;
+        font-size: 3.5rem;
         font-weight: 800;
-        color: var(--primary-blue);
         text-align: center;
         margin-bottom: 0.5rem;
+        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.2;
     }
     
     /* Sub-header */
     .sub-header {
-        color: var(--text-subtle);
+        color: var(--text-muted);
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 400;
     }
 
     /* Styling tombol utama (Primary) */
     .stButton > button {
-        background-color: var(--primary-blue);
+        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
         color: white;
         font-weight: 700;
-        padding: 0.75rem 2.5rem;
+        padding: 1rem 3rem;
         border-radius: 9999px;
         border: none;
-        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        transition: all 0.2s ease-in-out;
+        box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+        transition: all 0.3s ease-in-out;
     }
     .stButton > button:hover {
-        background-color: #0069d9;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(142, 45, 226, 0.5);
     }
     .stButton > button:disabled {
-        background-color: #e9ecef;
-        color: #adb5bd;
+        background: var(--border-color);
+        color: #6c757d;
         box-shadow: none;
         cursor: not-allowed;
     }
@@ -101,43 +103,67 @@ st.markdown("""
     .stDownloadButton > button, 
     .stButton:not(.stButton[data-testid*="primary"]) > button {
         background-color: var(--card-bg);
-        color: var(--text-dark);
+        color: var(--text-light);
         font-weight: 600;
-        padding: 0.75rem 2.5rem;
+        padding: 1rem 3rem;
         border-radius: 9999px;
         border: 1px solid var(--border-color);
-        box-shadow: 0 2px 5px var(--shadow-soft);
-        transition: all 0.2s ease-in-out;
+        box-shadow: 0 2px 10px var(--shadow-soft);
+        transition: all 0.3s ease-in-out;
     }
     .stDownloadButton > button:hover, 
     .stButton:not(.stButton[data-testid*="primary"]) > button:hover {
-        background-color: #e9ecef;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: var(--border-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     /* Judul Hasil */
     .result-type {
-        font-size: 2.25rem;
+        font-size: 2.5rem;
         font-weight: 800;
-        color: var(--secondary-green);
+        color: var(--accent-blue);
         text-align: center;
-        padding: 0.5rem 1.5rem;
-        background-color: rgba(40, 167, 69, 0.1);
-        border-radius: 1rem;
+        padding: 0.75rem 2rem;
+        background-color: rgba(0, 188, 212, 0.1);
+        border-radius: 1.5rem;
         display: inline-block;
+        border: 2px solid var(--accent-blue);
+        line-height: 1.2;
     }
     
     /* Styling peringatan dan informasi */
     div[data-testid="stAlert"] {
-        border-radius: 0.75rem;
+        border-radius: 1rem;
+        background-color: rgba(255, 255, 0, 0.1);
+        border-left: 5px solid #ffc107;
+        color: #ffc107;
     }
-    
+    div[data-testid="stAlert"] .css-1h50x7m {
+        color: #ffc107;
+    }
+
     /* Tombol ikon kembali */
     .back-btn-container {
         display: flex;
         justify-content: flex-start;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Keterbacaan Markdown */
+    h3 {
+        color: var(--accent-blue);
+        font-weight: 700;
+        margin-top: 2.5rem;
+    }
+    .stMarkdown p {
+        color: var(--text-light);
+    }
+    .stMarkdown li {
+        color: var(--text-light);
+    }
+    .stMarkdown ul {
+        padding-left: 2rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -242,7 +268,7 @@ def disclaimer_page():
         with col2:
             if st.button("Saya Mengerti", use_container_width=True):
                 st.session_state.page = 'upload'
-                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                st.rerun()
 
 def upload_page():
     """Halaman unggah file utama."""
@@ -252,7 +278,7 @@ def upload_page():
     with st.container():
         st.markdown("<div class='clean-card'>", unsafe_allow_html=True)
         st.subheader("Unggah Foto Luka Anda")
-        st.write("Mulai analisis cepat dan dapatkan panduan pertolongan pertama.")
+        st.markdown("<p style='color: var(--text-muted);'>Mulai analisis cepat dan dapatkan panduan pertolongan pertama.</p>", unsafe_allow_html=True)
         
         uploaded_file = st.file_uploader(
             "Pilih gambar luka Anda",
@@ -268,12 +294,12 @@ def upload_page():
         with col1:
             if st.button("Mulai Analisis", disabled=not uploaded_file, use_container_width=True):
                 st.session_state.page = 'loading'
-                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                st.rerun()
         with col2:
             if st.session_state.scans_history:
                 if st.button("Lihat Riwayat Scan", use_container_width=True):
                     st.session_state.page = 'history'
-                    st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                    st.rerun()
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -310,7 +336,7 @@ def loading_page():
         
         st.session_state.prediction_result = prediction
         st.session_state.page = 'result'
-        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+        st.rerun()
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -320,7 +346,7 @@ def result_page():
     st.markdown("<div class='back-btn-container'>", unsafe_allow_html=True)
     if st.button("← Kembali", key="back_from_result"):
         st.session_state.page = 'upload'
-        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown("<h1 class='main-header'>Analisis Selesai!</h1>", unsafe_allow_html=True)
@@ -329,7 +355,7 @@ def result_page():
     if not prediction:
         st.warning("Tidak ada hasil yang ditemukan.")
         st.session_state.page = 'upload'
-        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+        st.rerun()
         return
 
     recommendation = RECOMMENDATIONS.get(prediction['name'], {
@@ -347,26 +373,26 @@ def result_page():
             st.image(BytesIO(prediction['image_data']), caption="Gambar Luka Anda", use_column_width=True)
             
         with col2:
-            st.markdown("<p style='color: var(--text-subtle);'>Jenis Luka Teridentifikasi:</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color: var(--text-muted);'>Jenis Luka Teridentifikasi:</p>", unsafe_allow_html=True)
             st.markdown(f"<div class='result-type'>{recommendation['title']}</div>", unsafe_allow_html=True)
             
-            st.markdown("<p style='color: var(--text-subtle); margin-top: 1rem;'>Tingkat Kepercayaan Model:</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color: var(--text-muted); margin-top: 1rem;'>Tingkat Kepercayaan Model:</p>", unsafe_allow_html=True)
             st.progress(prediction['confidence'] / 100)
-            st.markdown(f"<p style='color: var(--text-subtle); font-size: 0.875rem;'>{prediction['confidence']:.2f}% Akurasi</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color: var(--text-muted); font-size: 0.875rem;'>{prediction['confidence']:.2f}% Akurasi</p>", unsafe_allow_html=True)
             
-        st.markdown("<h3 style='color: var(--primary-blue); font-weight: 600; margin-top: 2rem;'>Panduan Pertolongan Pertama</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: var(--accent-blue); font-weight: 600; margin-top: 2rem;'>Panduan Pertolongan Pertama</h3>", unsafe_allow_html=True)
         for item in recommendation['guidance']:
-            st.markdown(f"✅ {item}")
+            st.markdown(f"<p>✅ {item}</p>")
         
         st.markdown("<h3 style='color: #dc3545; font-weight: 600; margin-top: 2rem;'>Kapan Harus Mencari Bantuan Medis</h3>", unsafe_allow_html=True)
         for item in recommendation['when_to_seek_help']:
-            st.markdown(f"🚨 {item}")
+            st.markdown(f"<p>🚨 {item}</p>")
             
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
             if st.button("Scan Luka Lain", use_container_width=True):
                 st.session_state.page = 'upload'
-                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                st.rerun()
 
         with col_btn2:
             download_text = f"""
@@ -400,7 +426,7 @@ def history_page():
     st.markdown("<div class='back-btn-container'>", unsafe_allow_html=True)
     if st.button("← Kembali", key="back_from_history"):
         st.session_state.page = 'upload'
-        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown("<h1 class='main-header'>Riwayat Pemindaian</h1>", unsafe_allow_html=True)
@@ -418,13 +444,13 @@ def history_page():
                     st.image(BytesIO(scan['image_data']), width=75)
                 with col2:
                     st.markdown(f"**{recommendation['title']}**")
-                    st.markdown(f"<p style='font-size: 0.875rem; color: var(--text-subtle);'>Akurasi: {scan['confidence']:.2f}%</p>", unsafe_allow_html=True)
-                    st.markdown(f"<p style='font-size: 0.75rem; color: var(--text-subtle);'>{scan['timestamp']}</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='font-size: 0.875rem; color: var(--text-muted);'>Akurasi: {scan['confidence']:.2f}%</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='font-size: 0.75rem; color: var(--text-muted);'>{scan['timestamp']}</p>", unsafe_allow_html=True)
                 with col3:
                     if st.button("Lihat Detail", key=f"history_btn_{i}", use_container_width=True):
                         st.session_state.prediction_result = scan
                         st.session_state.page = 'result'
-                        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                        st.rerun()
                 st.markdown("---")
                 
             # Tombol aksi riwayat
@@ -432,7 +458,7 @@ def history_page():
                 if st.button("Bersihkan Riwayat", key="clear_history", use_container_width=True):
                     st.session_state.scans_history = []
                     st.session_state.page = 'history'
-                    st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
+                    st.rerun()
                     st.toast("Riwayat berhasil dibersihkan!")
 
         st.markdown("</div>", unsafe_allow_html=True)
@@ -450,4 +476,4 @@ elif st.session_state.page == 'history':
     history_page()
 
 # --- Footer ---
-st.markdown("<p style='text-align: center; color: var(--text-subtle); font-size: 0.875rem; margin-top: 3rem;'>Aplikasi Klasifikasi Luka Otomatis v5.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: var(--text-muted); font-size: 0.875rem; margin-top: 3rem;'>Aplikasi Klasifikasi Luka Otomatis v6.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
