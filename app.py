@@ -6,7 +6,7 @@ from io import BytesIO
 # --- Konfigurasi Halaman dan Tema ---
 st.set_page_config(
     page_title="MediScan AI",
-    page_icon="🩹",
+    page_icon="�",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
@@ -242,7 +242,7 @@ def disclaimer_page():
         with col2:
             if st.button("Saya Mengerti", use_container_width=True):
                 st.session_state.page = 'upload'
-                st.experimental_rerun()
+                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
 
 def upload_page():
     """Halaman unggah file utama."""
@@ -268,12 +268,12 @@ def upload_page():
         with col1:
             if st.button("Mulai Analisis", disabled=not uploaded_file, use_container_width=True):
                 st.session_state.page = 'loading'
-                st.experimental_rerun()
+                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
         with col2:
             if st.session_state.scans_history:
                 if st.button("Lihat Riwayat Scan", use_container_width=True):
                     st.session_state.page = 'history'
-                    st.experimental_rerun()
+                    st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -310,7 +310,7 @@ def loading_page():
         
         st.session_state.prediction_result = prediction
         st.session_state.page = 'result'
-        st.experimental_rerun()
+        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -320,7 +320,7 @@ def result_page():
     st.markdown("<div class='back-btn-container'>", unsafe_allow_html=True)
     if st.button("← Kembali", key="back_from_result"):
         st.session_state.page = 'upload'
-        st.experimental_rerun()
+        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown("<h1 class='main-header'>Analisis Selesai!</h1>", unsafe_allow_html=True)
@@ -329,7 +329,7 @@ def result_page():
     if not prediction:
         st.warning("Tidak ada hasil yang ditemukan.")
         st.session_state.page = 'upload'
-        st.experimental_rerun()
+        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
         return
 
     recommendation = RECOMMENDATIONS.get(prediction['name'], {
@@ -366,7 +366,7 @@ def result_page():
         with col_btn1:
             if st.button("Scan Luka Lain", use_container_width=True):
                 st.session_state.page = 'upload'
-                st.experimental_rerun()
+                st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
 
         with col_btn2:
             download_text = f"""
@@ -400,7 +400,7 @@ def history_page():
     st.markdown("<div class='back-btn-container'>", unsafe_allow_html=True)
     if st.button("← Kembali", key="back_from_history"):
         st.session_state.page = 'upload'
-        st.experimental_rerun()
+        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
     
     st.markdown("<h1 class='main-header'>Riwayat Pemindaian</h1>", unsafe_allow_html=True)
@@ -424,7 +424,7 @@ def history_page():
                     if st.button("Lihat Detail", key=f"history_btn_{i}", use_container_width=True):
                         st.session_state.prediction_result = scan
                         st.session_state.page = 'result'
-                        st.experimental_rerun()
+                        st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
                 st.markdown("---")
                 
             # Tombol aksi riwayat
@@ -432,7 +432,7 @@ def history_page():
                 if st.button("Bersihkan Riwayat", key="clear_history", use_container_width=True):
                     st.session_state.scans_history = []
                     st.session_state.page = 'history'
-                    st.experimental_rerun()
+                    st.rerun() # PERBAIKAN: Mengganti st.experimental_rerun() dengan st.rerun()
                     st.toast("Riwayat berhasil dibersihkan!")
 
         st.markdown("</div>", unsafe_allow_html=True)
