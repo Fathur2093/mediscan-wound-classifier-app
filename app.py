@@ -14,89 +14,114 @@ st.set_page_config(
 # --- CSS Kustom untuk Tampilan Dark Mode Profesional ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
     
     html, body, [class*="st-"] {
         font-family: 'Inter', sans-serif;
     }
 
-    /* Palet Warna & Latar Belakang (Dark Mode) */
+    /* Palet Warna & Latar Belakang (Final Dark Mode) */
     :root {
-        --dark-bg: #1a1a2e;
-        --card-bg: #222540;
-        --accent-blue: #00bcd4;
-        --accent-purple: #8e2de2;
+        --deep-dark: #0e1117;
+        --card-bg: #1c202a;
+        --border-color: #2e3441;
         --text-light: #e0e0e0;
         --text-muted: #a0a0a0;
-        --border-color: #3e3e5c;
-        --shadow-soft: rgba(0, 0, 0, 0.3);
+        --accent-teal: #00C9A7;
+        --accent-purple: #A822D6;
+        --shadow-soft: rgba(0, 0, 0, 0.5);
     }
     
     body {
-        background-color: var(--dark-bg);
+        background-color: var(--deep-dark);
         color: var(--text-light);
     }
     
     .stApp {
-        background-color: var(--dark-bg);
+        background-color: var(--deep-dark);
     }
 
-    /* Kartu UI yang Lebih Bersih & Menonjol */
+    /* Kartu UI yang Lebih Elegan & Berkedalaman */
     .clean-card {
         background-color: var(--card-bg);
         border-radius: 1.5rem;
-        box-shadow: 0 8px 20px var(--shadow-soft);
+        box-shadow: 0 10px 30px var(--shadow-soft);
         border: 1px solid var(--border-color);
-        padding: 3rem;
-        margin-top: 2rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 3.5rem;
+        margin-top: 2.5rem;
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .clean-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 1.5rem;
+        padding: 2px;
+        background: linear-gradient(135deg, var(--accent-teal), var(--accent-purple));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
     }
     .clean-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+    .clean-card:hover::before {
+        opacity: 0.2;
     }
     
-    /* Judul Utama dengan Gradien */
+    /* Judul Utama dengan Gradien Glossy */
     .main-header {
-        font-size: 3.5rem;
+        font-size: 3.8rem;
         font-weight: 800;
         text-align: center;
         margin-bottom: 0.5rem;
-        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+        background: linear-gradient(45deg, var(--accent-teal), var(--accent-purple));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1.2;
+        letter-spacing: -1px;
     }
     
     /* Sub-header */
     .sub-header {
         color: var(--text-muted);
         text-align: center;
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         font-weight: 400;
+        margin-bottom: 2rem;
     }
 
-    /* Styling tombol utama (Primary) */
+    /* Styling tombol utama (Primary) dengan efek glossy */
     .stButton > button {
-        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+        background: linear-gradient(45deg, var(--accent-teal), var(--accent-purple));
         color: white;
         font-weight: 700;
-        padding: 1rem 3rem;
+        padding: 1.2rem 3.5rem;
         border-radius: 9999px;
         border: none;
-        box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 201, 167, 0.4);
         transition: all 0.3s ease-in-out;
     }
     .stButton > button:hover {
-        background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(142, 45, 226, 0.5);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(168, 34, 214, 0.5);
+        filter: brightness(1.1);
     }
     .stButton > button:disabled {
         background: var(--border-color);
         color: #6c757d;
         box-shadow: none;
         cursor: not-allowed;
+        transform: none;
+        filter: none;
     }
 
     /* Styling tombol sekunder */
@@ -105,7 +130,7 @@ st.markdown("""
         background-color: var(--card-bg);
         color: var(--text-light);
         font-weight: 600;
-        padding: 1rem 3rem;
+        padding: 1.2rem 3.5rem;
         border-radius: 9999px;
         border: 1px solid var(--border-color);
         box-shadow: 0 2px 10px var(--shadow-soft);
@@ -120,24 +145,25 @@ st.markdown("""
 
     /* Judul Hasil */
     .result-type {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 800;
-        color: var(--accent-blue);
+        color: var(--accent-teal);
         text-align: center;
-        padding: 0.75rem 2rem;
-        background-color: rgba(0, 188, 212, 0.1);
-        border-radius: 1.5rem;
+        padding: 1rem 2.5rem;
+        background-color: rgba(0, 201, 167, 0.1);
+        border-radius: 2rem;
         display: inline-block;
-        border: 2px solid var(--accent-blue);
+        border: 2px solid var(--accent-teal);
         line-height: 1.2;
     }
     
     /* Styling peringatan dan informasi */
     div[data-testid="stAlert"] {
         border-radius: 1rem;
-        background-color: rgba(255, 255, 0, 0.1);
+        background-color: rgba(255, 193, 7, 0.1);
         border-left: 5px solid #ffc107;
         color: #ffc107;
+        font-weight: 500;
     }
     div[data-testid="stAlert"] .css-1h50x7m {
         color: #ffc107;
@@ -147,23 +173,28 @@ st.markdown("""
     .back-btn-container {
         display: flex;
         justify-content: flex-start;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
     }
 
     /* Keterbacaan Markdown */
     h3 {
-        color: var(--accent-blue);
+        color: var(--accent-teal);
         font-weight: 700;
         margin-top: 2.5rem;
     }
     .stMarkdown p {
         color: var(--text-light);
+        line-height: 1.8;
     }
     .stMarkdown li {
         color: var(--text-light);
+        line-height: 1.8;
     }
     .stMarkdown ul {
         padding-left: 2rem;
+    }
+    .st-emotion-cache-1r650s {
+        background-color: var(--deep-dark);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -277,7 +308,7 @@ def upload_page():
     
     with st.container():
         st.markdown("<div class='clean-card'>", unsafe_allow_html=True)
-        st.subheader("Unggah Foto Luka Anda")
+        st.markdown("<p style='color: var(--text-light); font-size: 1.5rem; font-weight: 600;'>Unggah Foto Luka Anda</p>", unsafe_allow_html=True)
         st.markdown("<p style='color: var(--text-muted);'>Mulai analisis cepat dan dapatkan panduan pertolongan pertama.</p>", unsafe_allow_html=True)
         
         uploaded_file = st.file_uploader(
@@ -380,11 +411,11 @@ def result_page():
             st.progress(prediction['confidence'] / 100)
             st.markdown(f"<p style='color: var(--text-muted); font-size: 0.875rem;'>{prediction['confidence']:.2f}% Akurasi</p>", unsafe_allow_html=True)
             
-        st.markdown("<h3 style='color: var(--accent-blue); font-weight: 600; margin-top: 2rem;'>Panduan Pertolongan Pertama</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: var(--accent-teal); font-weight: 600; margin-top: 2rem;'>Panduan Pertolongan Pertama</h3>", unsafe_allow_html=True)
         for item in recommendation['guidance']:
             st.markdown(f"<p>✅ {item}</p>")
         
-        st.markdown("<h3 style='color: #dc3545; font-weight: 600; margin-top: 2rem;'>Kapan Harus Mencari Bantuan Medis</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: #ff4d4d; font-weight: 600; margin-top: 2rem;'>Kapan Harus Mencari Bantuan Medis</h3>", unsafe_allow_html=True)
         for item in recommendation['when_to_seek_help']:
             st.markdown(f"<p>🚨 {item}</p>")
             
@@ -476,4 +507,4 @@ elif st.session_state.page == 'history':
     history_page()
 
 # --- Footer ---
-st.markdown("<p style='text-align: center; color: var(--text-muted); font-size: 0.875rem; margin-top: 3rem;'>Aplikasi Klasifikasi Luka Otomatis v6.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: var(--text-muted); font-size: 0.875rem; margin-top: 3rem;'>Aplikasi Klasifikasi Luka Otomatis v7.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
