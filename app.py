@@ -11,8 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS Kustom untuk Tampilan Mirip Tema Lama ---
-# Menggunakan Markdown dengan HTML tidak aman untuk styling
+# --- CSS Kustom untuk Tampilan Tema Terang ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -20,11 +19,68 @@ st.markdown("""
     html, body, [class*="st-"] {
         font-family: 'Inter', sans-serif;
     }
+
+    /* Palet Warna Tema Terang */
+    :root {
+        --primary-color: #0d9488;  /* Teal */
+        --secondary-color: #3b82f6; /* Blue */
+        --background-color: #f1f5f9; /* Light Slate */
+        --card-bg: rgba(255, 255, 255, 0.7);
+        --text-dark: #0f172a;
+        --text-subtle: #4b5563;
+        --border-color: rgba(0, 0, 0, 0.1);
+    }
     
-    /* Ganti warna utama Streamlit untuk konsistensi */
+    body {
+        background-color: var(--background-color);
+        color: var(--text-dark);
+    }
+
+    /* Kustomisasi Kontainer Utama */
+    .stApp {
+        background-color: var(--background-color);
+        background-image: radial-gradient(circle at top left, #e0f2fe 0%, transparent 20%),
+                        radial-gradient(circle at bottom right, #ccfbf1 0%, transparent 20%);
+    }
+
+    /* Kartu "Glassmorphism" untuk tema terang */
+    .glass-card {
+        background-color: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color);
+        padding: 2.5rem;
+        margin-top: 2rem;
+        transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Judul utama dengan gradien */
+    .main-header {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Sub-header */
+    .sub-header {
+        color: var(--text-subtle);
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    /* Styling tombol utama (Primary) */
     .stButton > button {
         background: linear-gradient(90deg, #10b981, #06b6d4);
-        color: #0f172a;
+        color: #f1f5f9;
         font-weight: 600;
         padding: 0.75rem 2.5rem;
         border-radius: 9999px;
@@ -35,54 +91,47 @@ st.markdown("""
     .stButton > button:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        color: white;
     }
-    .stDownloadButton > button {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #f1f5f9;
+
+    /* Styling tombol sekunder (Secondary) */
+    .stDownloadButton > button, 
+    .stButton:not(.stButton[data-testid*="primary"]) > button {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: var(--text-dark);
         font-weight: 600;
         padding: 0.75rem 2.5rem;
         border-radius: 9999px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: none;
         transition: all 0.3s ease;
     }
-    .stDownloadButton > button:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+    .stDownloadButton > button:hover, 
+    .stButton:not(.stButton[data-testid*="primary"]) > button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
         transform: translateY(-1px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Kustomisasi kontainer utama */
-    .glass-card {
-        background-color: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(15px);
-        border-radius: 1.5rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 2.5rem;
-        margin-top: 3rem;
-    }
-    
-    /* Judul utama dengan gradien */
-    .main-header {
-        font-size: 3rem;
-        font-weight: 800;
-        background: linear-gradient(45deg, #06b6d4, #f1f5f9);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Result card */
+    /* Judul hasil */
     .result-type {
-        font-size: 2.5rem;
+        font-size: 2.25rem;
         font-weight: 800;
-        color: #06b6d4;
+        color: var(--primary-color);
         text-align: center;
         padding: 0.5rem 1.5rem;
         background-color: rgba(6, 182, 212, 0.1);
-        border: 1px solid #06b6d4;
+        border: 1px solid var(--primary-color);
         border-radius: 1rem;
         display: inline-block;
+    }
+
+    /* Teks panduan */
+    .stMarkdown ul, .stMarkdown ol {
+        margin-left: 1rem;
+    }
+    .stMarkdown li {
+        margin-bottom: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -172,11 +221,11 @@ if 'prediction_result' not in st.session_state:
 def disclaimer_page():
     """Halaman disclaimer dan persetujuan."""
     st.markdown("<h1 class='main-header'>MediScan AI</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.2rem;'>Klasifikasi Otomatis Jenis Luka Luar</p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Klasifikasi Otomatis Jenis Luka Luar</p>", unsafe_allow_html=True)
     
     with st.container():
-        st.markdown("<div class='glass-card' style='text-align: center;'>", unsafe_allow_html=True)
-        st.warning("⚠️ **Disclaimer Penting**", icon="🚨")
+        st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+        st.info("⚠️ **Disclaimer Penting**")
         st.markdown("""
         Informasi ini adalah panduan awal dan bukan pengganti diagnosis atau perawatan medis profesional. 
         Selalu konsultasi dengan tenaga medis profesional jika luka parah, tidak membaik, menunjukkan tanda infeksi, atau Anda ragu.
@@ -185,14 +234,14 @@ def disclaimer_page():
 
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("Saya Mengerti", key="disclaimer_btn"):
+            if st.button("Saya Mengerti", use_container_width=True):
                 st.session_state.page = 'upload'
                 st.experimental_rerun()
 
 def upload_page():
     """Halaman unggah file utama."""
     st.markdown("<h1 class='main-header'>MediScan AI</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.2rem;'>Klasifikasi Otomatis Jenis Luka Luar</p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Klasifikasi Otomatis Jenis Luka Luar</p>", unsafe_allow_html=True)
 
     with st.container():
         st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
@@ -205,30 +254,28 @@ def upload_page():
             label_visibility="collapsed"
         )
         
-        st.session_state.uploaded_file = uploaded_file
-
-        if st.session_state.uploaded_file is not None:
+        if uploaded_file:
+            st.session_state.uploaded_file = uploaded_file
             st.image(st.session_state.uploaded_file, caption="Gambar yang Diunggah", use_column_width=True)
-            
-            # Kolom untuk tombol
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Mulai Analisis"):
-                    st.session_state.page = 'loading'
+        
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("Mulai Analisis", disabled=not uploaded_file, use_container_width=True):
+                st.session_state.page = 'loading'
+                st.experimental_rerun()
+        with col2:
+            if st.session_state.scans_history:
+                if st.button("Lihat Riwayat Scan", use_container_width=True):
+                    st.session_state.page = 'history'
                     st.experimental_rerun()
-            with col2:
-                if st.session_state.scans_history:
-                    if st.button("Lihat Riwayat Scan"):
-                        st.session_state.page = 'history'
-                        st.experimental_rerun()
         
         st.markdown("</div>", unsafe_allow_html=True)
 
 
 def loading_page():
     """Halaman simulasi loading."""
-    st.markdown("<h1 class='main-header'>Analisis Luka Anda...</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 1.2rem;'>Harap tunggu sebentar, kami sedang memproses data...</p>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'>Menganalisis Luka Anda...</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Harap tunggu sebentar, kami sedang memproses data...</p>", unsafe_allow_html=True)
 
     with st.container():
         st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
@@ -236,16 +283,11 @@ def loading_page():
         if st.session_state.uploaded_file:
             st.image(st.session_state.uploaded_file, width=150)
         
-        # Simulasi progress bar dan spinner
         st.write("")
-        st.info("Menganalisis...")
-        my_bar = st.progress(0)
+        with st.spinner("Model sedang berjalan..."):
+            time.sleep(3) # Simulasi waktu prediksi
         
-        for percent_complete in range(100):
-            time.sleep(0.03) # Mengatur kecepatan animasi
-            my_bar.progress(percent_complete + 1)
-        
-        my_bar.empty()
+        st.success("Analisis selesai!")
         
         # Simulasi hasil prediksi
         random_class = random.choice(CLASS_NAMES)
@@ -294,49 +336,29 @@ def result_page():
             st.image(BytesIO(prediction['image_data']), caption="Gambar Luka Anda", use_column_width=True)
             
         with col2:
-            st.markdown("<p style='color: #94a3b8;'>Jenis Luka Teridentifikasi:</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color: var(--text-subtle);'>Jenis Luka Teridentifikasi:</p>", unsafe_allow_html=True)
             st.markdown(f"<div class='result-type'>{recommendation['title']}</div>", unsafe_allow_html=True)
             
-            st.markdown("<p style='color: #94a3b8; margin-top: 1rem;'>Tingkat Kepercayaan Model:</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color: var(--text-subtle); margin-top: 1rem;'>Tingkat Kepercayaan Model:</p>", unsafe_allow_html=True)
             st.progress(prediction['confidence'] / 100)
-            st.markdown(f"<p style='color: #64748b; font-size: 0.875rem;'>{prediction['confidence']:.2f}% Akurasi</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color: var(--text-subtle); font-size: 0.875rem;'>{prediction['confidence']:.2f}% Akurasi</p>", unsafe_allow_html=True)
             
-        st.subheader("Panduan Pertolongan Pertama")
+        st.markdown("<h3 style='color: var(--primary-color); font-weight: 600; margin-top: 2rem;'>Panduan Pertolongan Pertama</h3>", unsafe_allow_html=True)
         for item in recommendation['guidance']:
             st.markdown(f"✅ {item}")
         
-        st.subheader("Kapan Harus Mencari Bantuan Medis")
+        st.markdown("<h3 style='color: #ef4444; font-weight: 600; margin-top: 2rem;'>Kapan Harus Mencari Bantuan Medis</h3>", unsafe_allow_html=True)
         for item in recommendation['when_to_seek_help']:
             st.markdown(f"🚨 {item}")
             
         # Tombol aksi
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
-            if st.button("Scan Luka Lain"):
+            if st.button("Scan Luka Lain", use_container_width=True):
                 st.session_state.page = 'upload'
                 st.experimental_rerun()
 
         with col_btn2:
-            if st.button("Salin Rekomendasi"):
-                # Menampilkan teks yang bisa disalin
-                recommendation_text = f"""
-Hasil Analisis MediScan AI
-Jenis Luka Teridentifikasi: {recommendation['title']}
-Tingkat Kepercayaan Model: {prediction['confidence']:.2f}%
-
----
-
-Panduan Pertolongan Pertama:
-{'\n'.join([f"• {item}" for item in recommendation['guidance']])}
-
----
-
-Kapan Harus Mencari Bantuan Medis:
-{'\n'.join([f"• {item}" for item in recommendation['when_to_seek_help']])}
-"""
-                st.text_area("Salin teks di bawah ini:", recommendation_text, height=300)
-
-            # Tombol download
             download_text = f"""
 Hasil Analisis MediScan AI
 Jenis Luka Teridentifikasi: {recommendation['title']}
@@ -356,7 +378,8 @@ Kapan Harus Mencari Bantuan Medis:
                 label="Simpan Rekomendasi",
                 data=download_text,
                 file_name=f"rekomendasi_mediscan_{prediction['name']}.txt",
-                mime="text/plain"
+                mime="text/plain",
+                use_container_width=True
             )
         
         st.markdown("</div>", unsafe_allow_html=True)
@@ -379,23 +402,23 @@ def history_page():
                     st.image(BytesIO(scan['image_data']), width=75)
                 with col2:
                     st.markdown(f"**{recommendation['title']}**")
-                    st.markdown(f"<p style='font-size: 0.875rem; color: #94a3b8;'>Akurasi: {scan['confidence']:.2f}%</p>", unsafe_allow_html=True)
-                    st.markdown(f"<p style='font-size: 0.75rem; color: #64748b;'>{scan['timestamp']}</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='font-size: 0.875rem; color: var(--text-subtle);'>Akurasi: {scan['confidence']:.2f}%</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='font-size: 0.75rem; color: var(--text-subtle);'>{scan['timestamp']}</p>", unsafe_allow_html=True)
                 with col3:
-                    if st.button("Lihat Detail", key=f"history_btn_{i}"):
+                    if st.button("Lihat Detail", key=f"history_btn_{i}", use_container_width=True):
                         st.session_state.prediction_result = scan
                         st.session_state.page = 'result'
                         st.experimental_rerun()
-                st.markdown("---") # Garis pemisah antar item
+                st.markdown("---")
                 
             # Tombol aksi riwayat
             col_history_btn1, col_history_btn2 = st.columns(2)
             with col_history_btn1:
-                if st.button("Kembali ke Unggah", key="back_to_upload_history"):
+                if st.button("Kembali ke Unggah", key="back_to_upload_history", use_container_width=True):
                     st.session_state.page = 'upload'
                     st.experimental_rerun()
             with col_history_btn2:
-                if st.button("Bersihkan Riwayat", key="clear_history"):
+                if st.button("Bersihkan Riwayat", key="clear_history", use_container_width=True):
                     st.session_state.scans_history = []
                     st.session_state.page = 'upload'
                     st.experimental_rerun()
@@ -416,4 +439,4 @@ elif st.session_state.page == 'history':
     history_page()
 
 # --- Footer ---
-st.markdown("<p style='text-align: center; color: #64748b; font-size: 0.875rem; margin-top: 5rem;'>Aplikasi Klasifikasi Luka Otomatis v5.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: var(--text-subtle); font-size: 0.875rem; margin-top: 3rem;'>Aplikasi Klasifikasi Luka Otomatis v5.0 | Dikembangkan oleh fath</p>", unsafe_allow_html=True)
